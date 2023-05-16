@@ -27,7 +27,7 @@ MODELS = {
     'ggml-large.bin': 'https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-large.bin',
 }
 
-model = 'ggml-tiny.bin'
+model = 'tiny.bin'
 
 def model_exists(model):
     return os.path.exists(Path(MODELS_DIR).joinpath(model))
