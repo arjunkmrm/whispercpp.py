@@ -28,6 +28,8 @@ MODELS = {
 }
 
 def model_exists(model):
+    print(f"type of model: {type(model)}, value: {model}")
+    print(f"type of MODELS_DIR: {type(MODELS_DIR)}, value: {MODELS_DIR}")
     return os.path.exists(Path(MODELS_DIR).joinpath(model))
 
 def download_model(model):
