@@ -7,7 +7,7 @@ import requests
 import os
 from pathlib import Path
 
-MODELS_DIR = str(Path('~/.ggml-models').expanduser())
+MODELS_DIR = str(Path('~/ggml-models').expanduser())
 print("Saving models to:", MODELS_DIR)
 
 
@@ -27,8 +27,10 @@ MODELS = {
     'ggml-large.bin': 'https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/ggml-large.bin',
 }
 
+model = 'ggml-tiny.bin'
+
 def model_exists(model):
-    return os.path.exists(Path(MODELS_DIR).joinpath(str(model)))
+    return os.path.exists(Path(MODELS_DIR).joinpath(model))
 
 
 def download_model(model):
