@@ -29,20 +29,20 @@ MODELS = {
 
 model = 'tiny.bin'
 
-def model_exists(model):
-    return os.path.exists(Path(MODELS_DIR).joinpath(model))
+#def model_exists(model):
+#    return os.path.exists(Path(MODELS_DIR).joinpath(model))
 
 
-def download_model(model):
-    if model_exists(model):
-        return
+#def download_model(model):
+#    if model_exists(model):
+#        return
 
-    print(f'Downloading {model}...')
-    url = MODELS[model]
-    r = requests.get(url, allow_redirects=True)
-    os.makedirs(MODELS_DIR, exist_ok=True)
-    with open(Path(MODELS_DIR).joinpath(model), 'wb') as f:
-        f.write(r.content)
+#    print(f'Downloading {model}...')
+#    url = MODELS[model]
+#    r = requests.get(url, allow_redirects=True)
+#    os.makedirs(MODELS_DIR, exist_ok=True)
+#    with open(Path(MODELS_DIR).joinpath(model), 'wb') as f:
+#        f.write(r.content)
 
 
 cdef cnp.ndarray[cnp.float32_t, ndim=1, mode="c"] load_audio(bytes file, int sr = SAMPLE_RATE):
@@ -88,9 +88,9 @@ cdef class Whisper:
     cdef whisper_full_params params
 
     def __init__(self, model=DEFAULT_MODEL, pb=None):
-        model_fullname = f'ggml-{model}.bin'.encode('utf8')
-        download_model(model_fullname)
-        model_path = Path(MODELS_DIR).joinpath(model_fullname)
+        #model_fullname = f'ggml-{model}.bin'.encode('utf8')
+        #download_model(model_fullname)
+        model_path = Path('/Users/arjun/ggml-models/tiny.bin')
         cdef bytes model_b = str(model_path).encode('utf8')
         self.ctx = whisper_init(model_b)
         self.params = default_params()
