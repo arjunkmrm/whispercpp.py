@@ -115,4 +115,14 @@ cdef class Whisper:
             whisper_full_get_segment_text(self.ctx, i).decode() for i in range(n_segments)
         ]
 
+    def stream_speech(self, list args):
+        cdef int argc = len(args)
+        cdef char **argv = <char **>malloc(argc * sizeof(char *))
+
+        for i, arg in enumerate(args):
+            argv[i] = arg.encode('utf-8')
+
+        cdef int result = stream(argc, argv)
+        free(argv)
+        return result
 
