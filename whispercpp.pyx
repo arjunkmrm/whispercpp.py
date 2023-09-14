@@ -138,11 +138,10 @@ cdef class Whisper:
                 strcpy(str, py_bytes_obj)
                 argv[i] = str
 
-            result = stream(argc, argv)
         finally:
             for i in range(argc):
                 free(argv[i])
             free(argv)
 
-        return result
+        return 0
 
