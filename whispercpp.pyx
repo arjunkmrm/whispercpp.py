@@ -6,6 +6,7 @@ import numpy as np
 import requests
 import os
 from pathlib import Path
+from libc.stdlib cimport malloc, free
 
 MODELS_DIR = str(Path('~/ggml-models').expanduser())
 print("Saving models to:", MODELS_DIR)
@@ -117,12 +118,20 @@ cdef class Whisper:
 
     def stream_speech(self, list args):
         cdef int argc = len(args)
-        cdef char **argv = <char **>malloc(argc * sizeof(char *))
+        cdef char **argv
+        cdef bytes py_bytes_obj
+        argv = <char **> malloc(argc * sizeof(char *))
+        if argv == NULL:
+            raise MemoryError("Failed to allocate memory for argv.")
 
-        for i, arg in enumerate(args):
-            argv[i] = arg.encode('utf-8')
+        try:
+            for i, arg in enumerate(args):
+                py_bytes_obj = arg.encode('utf-8')
+                argv[i] = py_bytes_obj
 
-        cdef int result = stream(argc, argv)
-        free(argv)
+            cdef int result = stream(argc, argv)
+        finally:
+            free(argv)
         return result
+
 
