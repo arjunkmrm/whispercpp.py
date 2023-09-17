@@ -6,6 +6,9 @@ import numpy as np
 import requests
 import os
 from pathlib import Path
+from libc.stdlib cimport malloc, free
+from libc.string cimport strcpy
+import sys
 
 MODELS_DIR = str(Path('~/ggml-models').expanduser())
 print("Saving models to:", MODELS_DIR)
@@ -86,6 +89,8 @@ cdef whisper_full_params default_params() nogil:
 cdef class Whisper:
     cdef whisper_context * ctx
     cdef whisper_full_params params
+    cdef int argc
+    cdef char** argv
 
     def __init__(self, model=DEFAULT_MODEL, pb=None):
         #model_fullname = f'ggml-{model}.bin'.encode('utf8')
@@ -94,10 +99,14 @@ cdef class Whisper:
         cdef bytes model_b = str(model_path).encode('utf8')
         self.ctx = whisper_init(model_b) # initialise context
         self.params = default_params() # initialise with default params
+        self.argc = len(sys.argv)
+        self.argv = <char**> malloc(argc * sizeof(char*))
+        
         whisper_print_system_info()
 
     def __dealloc__(self):
         whisper_free(self.ctx)
+        whisper_free(self.argv)
 
     def transcribe(self, filename=TEST_FILE):
         print("Loading data..")
@@ -115,13 +124,8 @@ cdef class Whisper:
             whisper_full_get_segment_text(self.ctx, i).decode() for i in range(n_segments)
         ]
     
-    def call_main():
-        import sys
-
-        cdef int argc = len(sys.argv)
-        cdef char** argv = <char**> malloc(argc * sizeof(char*))
-
-        main(argc, argv)
+    def call_main(self):
+        main(self.argc, self.argv)
 
     #if argv == NULL:
     #    raise MemoryError("Failed to allocate memory for argv.")
