@@ -134,8 +134,12 @@ cdef class Whisper:
                 
                 strcpy(argv[i], arg.encode('utf-8'))
 
-        #cdef int result = main(argc, argv)
-        main(self.argc, self.argv)
+            main(argc, argv)
+        finally:
+            for i in range(argc):
+                if argv[i] != NULL:
+                    free(argv[i])
+            free(argv)
 
     #if argv == NULL:
     #    raise MemoryError("Failed to allocate memory for argv.")
