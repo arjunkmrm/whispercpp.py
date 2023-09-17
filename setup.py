@@ -17,6 +17,7 @@ ext_modules = [
         sources=["whispercpp.pyx", "whisper.cpp/whisper.cpp", "stream.cpp"],
         language="c++",
         extra_compile_args=["-std=c++11"],
+        include_dirs=['/opt/homebrew/opt/sdl2']        
    )
 ]
 ext_modules = cythonize(ext_modules)
