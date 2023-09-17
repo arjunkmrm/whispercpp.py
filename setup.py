@@ -31,7 +31,7 @@ setup(
     author_email='luke@devthe.com',
     libraries=[whisper_clib],
     ext_modules = cythonize("whispercpp.pyx"),
-    include_dirs = ['./whisper.cpp/', numpy.get_include()],
+    include_dirs = ['./whisper.cpp/', '/opt/homebrew/opt/sdl2', numpy.get_include()],
     install_requires=[
       'numpy',
       'ffmpeg-python',
