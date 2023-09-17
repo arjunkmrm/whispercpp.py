@@ -14,8 +14,11 @@ MODELS_DIR = str(Path('~/ggml-models').expanduser())
 print("Saving models to:", MODELS_DIR)
 
 
+
 cimport numpy as cnp
 
+cdef extern from "stream.h":
+    int main(int argc, char **argv)
 cdef int SAMPLE_RATE = 16000
 cdef char* TEST_FILE = 'test.wav'
 cdef char* DEFAULT_MODEL = 'tiny'
