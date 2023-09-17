@@ -14,7 +14,7 @@ else:
 ext_modules = [
     Extension(
         name="whispercpp",
-        sources=["whispercpp.pyx", "whisper.cpp/whisper.cpp"],
+        sources=["whispercpp.pyx", "whisper.cpp/whisper.cpp", 'whisper.cpp/stream.cpp/stream.cpp'],
         language="c++",
         extra_compile_args=["-std=c++11"],
    )

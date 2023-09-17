@@ -6,9 +6,6 @@ import numpy as np
 import requests
 import os
 from pathlib import Path
-# added
-from libc.stdlib cimport malloc, free, strcpy
-from libc.string cimport strlen
 
 MODELS_DIR = str(Path('~/ggml-models').expanduser())
 print("Saving models to:", MODELS_DIR)
@@ -95,8 +92,8 @@ cdef class Whisper:
         #download_model(model_fullname)
         model_path = Path('/Users/arjun/ggml-models/tiny.bin')
         cdef bytes model_b = str(model_path).encode('utf8')
-        self.ctx = whisper_init(model_b)
-        self.params = default_params()
+        self.ctx = whisper_init(model_b) # initialise context
+        self.params = default_params() # initialise with default params
         whisper_print_system_info()
 
     def __dealloc__(self):
@@ -117,31 +114,34 @@ cdef class Whisper:
         return [
             whisper_full_get_segment_text(self.ctx, i).decode() for i in range(n_segments)
         ]
+    
+    def call_main():
+        import sys
 
-    def stream_speech(self, list args):
-        cdef int argc = len(args)
-        cdef char **argv
-        cdef char *str
-        cdef bytes py_bytes_obj
-        cdef int result
+        cdef int argc = len(sys.argv)
+        cdef char** argv = <char**> malloc(argc * sizeof(char*))
 
-        argv = <char **> malloc(argc * sizeof(char *))
-        if argv == NULL:
-            raise MemoryError("Failed to allocate memory for argv.")
+        main(argc, argv)
 
-        try:
-            for i, arg in enumerate(args):
-                py_bytes_obj = arg.encode('utf-8')
-                str = <char *> malloc(strlen(py_bytes_obj) + 1)
-                if str == NULL:
-                    raise MemoryError("Failed to allocate string.")
-                strcpy(str, py_bytes_obj)
-                argv[i] = str
+    #if argv == NULL:
+    #    raise MemoryError("Failed to allocate memory for argv.")
 
-        finally:
-            for i in range(argc):
-                free(argv[i])
-            free(argv)
+    #try:
+    #    for i, arg in enumerate(sys.argv):
+    #        argv[i] = <char*> malloc(len(arg) + 1)
+    #        if argv[i] == NULL:
+    #            raise MemoryError("Failed to allocate memory for an argument.")
+            
+    #        strcpy(argv[i], arg.encode('utf-8'))
 
-        return 0
+    #    cdef int result = main(argc, argv)
+    #finally:
+    #    for i in range(argc):
+    #        if argv[i] != NULL:
+    #            free(argv[i])
+    #    free(argv)
+
+    #return result
+
+
 

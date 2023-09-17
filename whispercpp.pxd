@@ -110,4 +110,5 @@ cdef extern from "whisper.h" nogil:
     cdef float whisper_full_get_token_p(whisper_context*, int, int)
     const char* whisper_print_system_info()
     const char* whisper_full_get_segment_text(whisper_context*, int)
+    cdef int main(int argc, char **argv)
 
