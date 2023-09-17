@@ -89,8 +89,6 @@ cdef whisper_full_params default_params() nogil:
 cdef class Whisper:
     cdef whisper_context * ctx
     cdef whisper_full_params params
-    cdef int argc
-    cdef char** argv
 
     def __init__(self, model=DEFAULT_MODEL, pb=None):
         #model_fullname = f'ggml-{model}.bin'.encode('utf8')
@@ -99,8 +97,6 @@ cdef class Whisper:
         cdef bytes model_b = str(model_path).encode('utf8')
         self.ctx = whisper_init(model_b) # initialise context
         self.params = default_params() # initialise with default params
-        self.argc = len(sys.argv)
-        self.argv = <char**> malloc(self.argc * sizeof(char*))
         
         whisper_print_system_info()
 
@@ -125,6 +121,20 @@ cdef class Whisper:
         ]
     
     def call_main(self):
+        cdef int argc = len(sys.argv)
+        cdef char** argv = <char**> malloc(argc * sizeof(char*))
+        if argv == NULL:
+            raise MemoryError("Failed to allocate memory for argv.")
+
+        try:
+            for i, arg in enumerate(sys.argv):
+                argv[i] = <char*> malloc(len(arg) + 1)
+                if argv[i] == NULL:
+                    raise MemoryError("Failed to allocate memory for an argument.")
+                
+                strcpy(argv[i], arg.encode('utf-8'))
+
+        #cdef int result = main(argc, argv)
         main(self.argc, self.argv)
 
     #if argv == NULL:
