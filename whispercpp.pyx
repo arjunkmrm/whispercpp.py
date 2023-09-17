@@ -102,7 +102,6 @@ cdef class Whisper:
 
     def __dealloc__(self):
         whisper_free(self.ctx)
-        free(self.argv)
 
     def transcribe(self, filename=TEST_FILE):
         print("Loading data..")
