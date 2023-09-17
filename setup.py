@@ -17,7 +17,7 @@ ext_modules = [
         sources=["whispercpp.pyx", "whisper.cpp/whisper.cpp", "stream.cpp"],
         language="c++",
         extra_compile_args=["-std=c++11"],
-        include_dirs=['./SDL2/']        
+        include_dirs=['/opt/homebrew/opt/sdl2']        
    )
 ]
 ext_modules = cythonize(ext_modules)
@@ -32,7 +32,7 @@ setup(
     author_email='luke@devthe.com',
     libraries=[whisper_clib],
     ext_modules = cythonize("whispercpp.pyx"),
-    include_dirs = ['./whisper.cpp/', './SDL2/', numpy.get_include()],
+    include_dirs = ['./whisper.cpp/', '/opt/homebrew/opt/sdl2', numpy.get_include()],
     install_requires=[
       'numpy',
       'ffmpeg-python',

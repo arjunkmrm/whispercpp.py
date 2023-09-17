@@ -3,10 +3,10 @@
 // A very quick-n-dirty implementation serving mainly as a proof of concept.
 //
 
-#include <whisper.h>
+#include "whisper.h"
 
-#include <SDL.h>
-#include <SDL_audio.h>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_audio.h"
 
 #include <cassert>
 #include <cstdio>
