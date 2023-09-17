@@ -100,13 +100,13 @@ cdef class Whisper:
         self.ctx = whisper_init(model_b) # initialise context
         self.params = default_params() # initialise with default params
         self.argc = len(sys.argv)
-        self.argv = <char**> malloc(argc * sizeof(char*))
+        self.argv = <char**> malloc(self.argc * sizeof(char*))
         
         whisper_print_system_info()
 
     def __dealloc__(self):
         whisper_free(self.ctx)
-        whisper_free(self.argv)
+        free(self.argv)
 
     def transcribe(self, filename=TEST_FILE):
         print("Loading data..")
