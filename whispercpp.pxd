@@ -16,6 +16,9 @@ cdef nogil:
         float* frames;
         int n_frames;
 
+cdef extern from "stream.h" nogil:
+    int main(int argc, char **argv);
+
 cdef extern from "whisper.h" nogil:
     enum whisper_sampling_strategy:
         WHISPER_SAMPLING_GREEDY = 0,

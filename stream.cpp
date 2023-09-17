@@ -3,7 +3,7 @@
 // A very quick-n-dirty implementation serving mainly as a proof of concept.
 //
 
-#include "whisper.h"
+#include <whisper.h>
 
 #include <SDL.h>
 #include <SDL_audio.h>
